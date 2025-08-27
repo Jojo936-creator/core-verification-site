@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verification</title>
+</head>
+<body>
+  <h1 id="status">Processing...</h1>
+
+  <script>
+    const code = new URLSearchParams(window.location.search).get("code");
+
+    if (code) {
+      fetch(`/api/verify?code=${code}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById("status").textContent = "✅ Verification successful!";
+          } else {
+            document.getElementById("status").textContent = "❌ Verification failed: " + data.error;
+          }
+        })
+        .catch(() => {
+          document.getElementById("status").textContent = "❌ Error contacting server.";
+        });
+    } else {
+      document.getElementById("status").textContent = "❌ No code received.";
+    }
+  </script>
+</body>
+</html>
